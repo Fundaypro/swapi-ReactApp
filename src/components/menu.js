@@ -1,30 +1,29 @@
-import React, {useState} from 'react'
-import CharacterContent from './CharactersContent';
-import PlanetsContent from './PlanetsContent';
+import React from 'react'
+import { useDispatch } from 'react-redux';
+import { changeWindow } from '../features/MenuSlice';
 
-function MainMenu(props) {
 
-  
-let menuItems =[
+function MainMenu() {
+const dispatch = useDispatch()
+const menuItems =[
   {
     id:1,
     text: 'Characterts'
   },
   {
     id:2,
-    text: 'Planets'
+    text: 'Planets',
   }
 ] 
-      
+  
 
 return (
   <ul>
     {menuItems.map(menuItems => 
       <li key={menuItems.id}>
-        <button value={menuItems.id} className="menuButton" onClick={(e)=>{
-          if (e.target.innerText === 'Planets') props.state(<PlanetsContent/>);
-          if (e.target.innerText === 'Characterts') props.state(<CharacterContent/>)
-        }}>
+        <button value={menuItems.id} className="menuButton" onClick={()=>{
+      dispatch(changeWindow(menuItems.id))
+    }}>
         {menuItems.text}
         </button>
       </li>)}

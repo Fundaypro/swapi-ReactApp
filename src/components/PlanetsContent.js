@@ -1,14 +1,19 @@
 import React, {useEffect , useState}  from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { nextPlanet, prevPlanets } from '../features/MenuSlice';
 import loaderScreen from '../imgs/loaderAnimation.gif'
 import requireFunction from './requireFunction'
 
 
-function PlanetsContent() {
-const [planetNumber, setPlanetNumber] = useState(1);
+function PlanetsContent(props) {
+const planetNumber = useSelector(state=>state.menu.planets);
+const maxPlanet = useSelector(state=>state.menu.maxPlanets)
+const dispatch = useDispatch()
 const [planet, setPlanet] = useState({});
-let backgroundImageControllerLeft = (planetNumber === 1) ? 14 :
+
+let backgroundImageControllerLeft = (planetNumber === 1) ? maxPlanet :
     planetNumber - 1 ;
-let backgroundImageControllerRight = (planetNumber === 14) ? 1 :
+let backgroundImageControllerRight = (planetNumber === maxPlanet) ? 1 :
     planetNumber + 1;
 const [loadingStatus, setLoadingStatus] = useState(false)
 let URL = 'https://swapi.dev/api/planets/'+planetNumber+'/?format=json'
@@ -37,8 +42,7 @@ if (loadingStatus === true) {
               backgroundRepeat: 'no-repeat'
             }} >
               <button className='swithcBtn' onClick={()=> {
-                if (planetNumber === 1) setPlanetNumber(14);
-                if (planetNumber > 1) setPlanetNumber(planetNumber - 1)
+                dispatch(prevPlanets())
               }}>
               {String.fromCharCode(8249)}
               </button>
@@ -50,8 +54,7 @@ if (loadingStatus === true) {
                 backgroundRepeat: 'no-repeat'
             }}>
                 <button className='swithcBtn' onClick={()=> {
-                    if (planetNumber === 1) setPlanetNumber(14);
-                    if (planetNumber > 1) setPlanetNumber(planetNumber - 1)
+                    dispatch(prevPlanets())
                 }}>
                   {String.fromCharCode(8249)}
                 </button>
@@ -63,8 +66,7 @@ if (loadingStatus === true) {
                     <p className="infoString">Terrain : {planet.terrain}</p>
                 </div>
                 <button className='swithcBtn' onClick={()=> {
-                  if (planetNumber === 14)setPlanetNumber(1);
-                  if (planetNumber < 14) setPlanetNumber(planetNumber + 1);
+                  dispatch(nextPlanet());
                 }}>
                   {String.fromCharCode(8250)}
                 </button>
@@ -76,8 +78,7 @@ if (loadingStatus === true) {
               backgroundRepeat: 'no-repeat'
             }} >
               <button className='swithcBtn' onClick={()=> {
-                  if (planetNumber === 14)setPlanetNumber(1);
-                  if (planetNumber < 14) setPlanetNumber(planetNumber + 1);
+                  dispatch(nextPlanet());
                 }}>
                   {String.fromCharCode(8250)}
                 </button>
@@ -94,16 +95,14 @@ if (loadingStatus === false) {
         width: '50%'
       }} >
           <button className='swithcBtn' onClick={()=> {
-            if (planetNumber === 1) setPlanetNumber(14);
-            if (planetNumber > 1) setPlanetNumber(planetNumber - 1)
+            dispatch(prevPlanets())
           }}
           style={{width: "25%"}}>
           {String.fromCharCode(8249)}
           </button>
           
            <button className='swithcBtn' onClick={()=> {
-              if (planetNumber === 14)setPlanetNumber(1);
-              if (planetNumber < 14) setPlanetNumber(planetNumber + 1);
+              dispatch(nextPlanet());;
             }}
             style={{width: "25%"}}>
               {String.fromCharCode(8250)}
